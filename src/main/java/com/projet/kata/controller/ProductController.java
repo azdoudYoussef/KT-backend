@@ -16,6 +16,17 @@ public class ProductController {
 
     private ProductService productService;
 
+    @PostMapping
+    public ResponseEntity<ProductDao> CreateNewProduct(@RequestBody ProductDao product) {
+        try {
+            ProductDao createdProduct = productService.saveProduct(product);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<ProductDao>> retrieveAllProducts() {
         try {
