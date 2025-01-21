@@ -4,10 +4,13 @@ import com.projet.kata.model.dao.ProductDao;
 import com.projet.kata.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
+import static com.projet.kata.util.Helper.checkIdFormat;
 
 @Service
 @AllArgsConstructor
@@ -42,7 +45,6 @@ public class ProductService {
 
     }
 
-
     public ProductDao updateProduct(String id, ProductDao productDao) {
         long productId;
         try {
@@ -75,5 +77,20 @@ public class ProductService {
         return null;
     }
 
+    @Transactional
+    public boolean removeProduct(String id) {
+        long productId = checkIdFormat(id);
+
+        if (productRepository.existsById(productId)) {
+            try {
+                productRepository.deleteById(productId);
+                return true;
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to delete the product", e);
+            }
+        }
+
+        return false;
+    }
 
 }

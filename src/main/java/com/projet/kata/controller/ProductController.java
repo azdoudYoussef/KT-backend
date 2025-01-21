@@ -65,4 +65,15 @@ public class ProductController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeProduct(@PathVariable(name = "id") String id) {
+        boolean isRemoved = productService.removeProduct(id);
+
+        if (isRemoved) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
 }
