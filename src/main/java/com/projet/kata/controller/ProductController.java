@@ -62,18 +62,24 @@ public class ProductController {
             return ResponseEntity.ok(updatedProduct);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeProduct(@PathVariable(name = "id") String id) {
-        boolean isRemoved = productService.removeProduct(id);
+        try {
+            boolean isRemoved = productService.removeProduct(id);
 
-        if (isRemoved) {
-            return ResponseEntity.noContent().build();
+            if (isRemoved) {
+                return ResponseEntity.noContent().build();
+            }
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 }

@@ -32,12 +32,7 @@ public class ProductService {
 
     public ProductDao getProductDetails(String id) {
 
-        long productId;
-        try {
-            productId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid product ID format");
-        }
+        long productId = checkIdFormat(id);
 
         Optional<ProductDao> productOptional = productRepository.findById(productId);
 
@@ -45,13 +40,9 @@ public class ProductService {
 
     }
 
+    @Transactional
     public ProductDao updateProduct(String id, ProductDao productDao) {
-        long productId;
-        try {
-            productId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid product ID format");
-        }
+        long productId = checkIdFormat(id);
 
         Optional<ProductDao> existingProductOptional = productRepository.findById(productId);
 
@@ -70,8 +61,11 @@ public class ProductService {
             existingProduct.setInventoryStatus(productDao.getInventoryStatus());
             existingProduct.setRating(productDao.getRating());
             existingProduct.setUpdatedAt(Instant.now().toEpochMilli());
-
-            return productRepository.save(existingProduct);
+            try {
+                return productRepository.save(existingProduct);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to update the product", e);
+            }
         }
 
         return null;
