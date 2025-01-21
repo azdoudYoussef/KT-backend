@@ -10,3 +10,9 @@ VALUES
     ('P008', 'Coffee Maker', 'Automatic coffee maker', 'coffeemaker.jpg', 'Appliances', 100.00, 25, 'REF008', 108, 'INSTOCK', 4.1, 1672531200, 1672617600),
     ('P009', 'Backpack', 'Durable and stylish backpack', 'backpack.jpg', 'Accessories', 50.00, 80, 'REF009', 109, 'INSTOCK', 4.4, 1672531200, 1672617600),
     ('P010', 'Smartwatch', 'Feature-packed smartwatch', 'smartwatch.jpg', 'Electronics', 250.00, 12, 'REF010', 110, 'LOWSTOCK', 4.7, 1672531200, 1672617600);
+
+INSERT INTO Account (username, firstname, email, password) VALUES
+('admin', 'admin', 'admin@admin.com', 'admin'),
+('root', 'toor', 'root@example.com', 'mawsitong'),
+('oussama', 'Ali', 'oe@example.com', 'password123'),
+('yahya', 'Adile', 'as@example.com', 'speedla3war');

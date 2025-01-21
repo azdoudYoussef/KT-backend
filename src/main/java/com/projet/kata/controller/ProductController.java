@@ -2,12 +2,17 @@ package com.projet.kata.controller;
 
 import com.projet.kata.model.dao.ProductDao;
 import com.projet.kata.service.ProductService;
+import com.projet.kata.util.Helper;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.projet.kata.util.Helper.ensureAdminAccess;
 
 @RestController
 @RequestMapping("/products")
@@ -19,9 +24,12 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDao> CreateNewProduct(@RequestBody ProductDao product) {
         try {
+            ensureAdminAccess();
             ProductDao createdProduct = productService.saveProduct(product);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
 
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -55,11 +63,14 @@ public class ProductController {
     @PatchMapping("/{id}")
     public ResponseEntity<ProductDao> updateProductDetails(@PathVariable(name = "id") String id, @RequestBody ProductDao productDao) {
         try {
+            ensureAdminAccess();
             ProductDao updatedProduct = productService.updateProduct(id, productDao);
             if (updatedProduct == null)
                 return ResponseEntity.notFound().build();
 
             return ResponseEntity.ok(updatedProduct);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (RuntimeException e) {
@@ -70,6 +81,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeProduct(@PathVariable(name = "id") String id) {
         try {
+            ensureAdminAccess();
             boolean isRemoved = productService.removeProduct(id);
 
             if (isRemoved) {
@@ -77,6 +89,8 @@ public class ProductController {
             }
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
