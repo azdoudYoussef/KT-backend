@@ -52,4 +52,17 @@ public class ProductController {
         }
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductDao> updateProductDetails(@PathVariable(name = "id") String id, @RequestBody ProductDao productDao) {
+        try {
+            ProductDao updatedProduct = productService.updateProduct(id, productDao);
+            if (updatedProduct == null)
+                return ResponseEntity.notFound().build();
+
+            return ResponseEntity.ok(updatedProduct);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
 }

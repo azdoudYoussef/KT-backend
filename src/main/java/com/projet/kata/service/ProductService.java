@@ -4,6 +4,8 @@ import com.projet.kata.model.dao.ProductDao;
 import com.projet.kata.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +40,39 @@ public class ProductService {
 
         return productOptional.orElse(null);
 
+    }
+
+
+    public ProductDao updateProduct(String id, ProductDao productDao) {
+        long productId;
+        try {
+            productId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid product ID format");
+        }
+
+        Optional<ProductDao> existingProductOptional = productRepository.findById(productId);
+
+        if (existingProductOptional.isPresent()) {
+            ProductDao existingProduct = existingProductOptional.get();
+
+            existingProduct.setCode(productDao.getCode());
+            existingProduct.setName(productDao.getName());
+            existingProduct.setDescription(productDao.getDescription());
+            existingProduct.setImage(productDao.getImage());
+            existingProduct.setCategory(productDao.getCategory());
+            existingProduct.setPrice(productDao.getPrice());
+            existingProduct.setQuantity(productDao.getQuantity());
+            existingProduct.setInternalReference(productDao.getInternalReference());
+            existingProduct.setShellId(productDao.getShellId());
+            existingProduct.setInventoryStatus(productDao.getInventoryStatus());
+            existingProduct.setRating(productDao.getRating());
+            existingProduct.setUpdatedAt(Instant.now().toEpochMilli());
+
+            return productRepository.save(existingProduct);
+        }
+
+        return null;
     }
 
 
