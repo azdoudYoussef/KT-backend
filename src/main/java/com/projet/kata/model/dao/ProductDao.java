@@ -2,6 +2,7 @@ package com.projet.kata.model.dao;
 
 import com.projet.kata.enumerate.InventoryStatus;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 @Entity
 @Table(name = "Product")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDao {
