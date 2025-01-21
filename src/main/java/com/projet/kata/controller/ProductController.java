@@ -38,4 +38,18 @@ public class ProductController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ProductDao> RetrieveProductDetails(@PathVariable(name = "id") String id) {
+        try {
+            ProductDao product = productService.getProductDetails(id);
+            if (product == null)
+                return ResponseEntity.notFound().build();
+
+            return ResponseEntity.ok(product);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 }
