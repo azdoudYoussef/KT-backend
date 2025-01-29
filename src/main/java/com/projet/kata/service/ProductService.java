@@ -8,11 +8,11 @@ public interface ProductService {
 
     List<ProductDao> getAllProducts();
 
-    ProductDao getProductDetails(String id);
+    ProductDao getProductDetails(Long id);
 
     ProductDao saveProduct(ProductDao product);
 
-    ProductDao updateProduct(String id, ProductDao productDao);
+    ProductDao updateProduct(Long id, ProductDao productDao);
 
-    boolean removeProduct(String id);
+    boolean removeProduct(Long id);
 }

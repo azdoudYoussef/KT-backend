@@ -46,7 +46,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ProductDao> RetrieveProductDetails(@PathVariable(name = "id") String id) {
+    public ResponseEntity<ProductDao> RetrieveProductDetails(@PathVariable(name = "id") Long id) {
         try {
             ProductDao product = productService.getProductDetails(id);
             if (product == null)
@@ -59,7 +59,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductDao> updateProductDetails(@PathVariable(name = "id") String id, @RequestBody ProductDao productDao) {
+    public ResponseEntity<ProductDao> updateProductDetails(@PathVariable(name = "id") Long id, @RequestBody ProductDao productDao) {
         try {
             ensureAdminAccess();
             ProductDao updatedProduct = productService.updateProduct(id, productDao);
@@ -77,7 +77,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeProduct(@PathVariable(name = "id") String id) {
+    public ResponseEntity<Void> removeProduct(@PathVariable(name = "id") Long id) {
         try {
             ensureAdminAccess();
             boolean isRemoved = productService.removeProduct(id);

@@ -9,10 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-
-import static com.projet.kata.util.Helper.checkIdFormat;
 
 @Service
 @RequiredArgsConstructor
@@ -32,19 +29,15 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll();
     }
 
-    public ProductDao getProductDetails(String id) {
-
-        long productId = checkIdFormat(id);
+    public ProductDao getProductDetails(Long productId) {
 
         Optional<ProductDao> productOptional = productRepository.findById(productId);
-
         return productOptional.orElse(null);
 
     }
 
     @Transactional
-    public ProductDao updateProduct(String id, ProductDao productDao) {
-        long productId = checkIdFormat(id);
+    public ProductDao updateProduct(Long productId, ProductDao productDao) {
 
         Optional<ProductDao> existingProductOptional = productRepository.findById(productId);
 
@@ -53,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
         if (existingProductOptional.isPresent()) {
             ProductDao existingProduct = existingProductOptional.get();
 
-            if (productDao.getCode().isEmpty()){
+            if (productDao.getCode().isEmpty()) {
                 existingProduct.setCode(productDao.getCode());
                 productIsUpdated = true;
             }
@@ -123,8 +116,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-    public boolean removeProduct(String id) {
-        long productId = checkIdFormat(id);
+    public boolean removeProduct(Long productId) {
 
         if (productRepository.existsById(productId)) {
             try {
