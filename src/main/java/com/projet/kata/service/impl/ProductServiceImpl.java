@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.projet.kata.util.Helper.checkIdFormat;
@@ -47,21 +48,70 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<ProductDao> existingProductOptional = productRepository.findById(productId);
 
+        boolean productIsUpdated = false;
+
         if (existingProductOptional.isPresent()) {
             ProductDao existingProduct = existingProductOptional.get();
 
-            existingProduct.setCode(productDao.getCode());
-            existingProduct.setName(productDao.getName());
-            existingProduct.setDescription(productDao.getDescription());
-            existingProduct.setImage(productDao.getImage());
-            existingProduct.setCategory(productDao.getCategory());
-            existingProduct.setPrice(productDao.getPrice());
-            existingProduct.setQuantity(productDao.getQuantity());
-            existingProduct.setInternalReference(productDao.getInternalReference());
-            existingProduct.setShellId(productDao.getShellId());
-            existingProduct.setInventoryStatus(productDao.getInventoryStatus());
-            existingProduct.setRating(productDao.getRating());
-            existingProduct.setUpdatedAt(Instant.now().toEpochMilli());
+            if (productDao.getCode().isEmpty()){
+                existingProduct.setCode(productDao.getCode());
+                productIsUpdated = true;
+            }
+
+            if (productDao.getName().isEmpty()) {
+                existingProduct.setName(productDao.getName());
+                productIsUpdated = true;
+            }
+
+            if (productDao.getDescription().isEmpty()) {
+                existingProduct.setDescription(productDao.getDescription());
+                productIsUpdated = true;
+            }
+
+            if (productDao.getImage().isEmpty()) {
+                existingProduct.setImage(productDao.getImage());
+                productIsUpdated = true;
+            }
+
+            if (productDao.getCategory().isEmpty()) {
+                existingProduct.setCategory(productDao.getCategory());
+                productIsUpdated = true;
+            }
+
+            if (!productDao.getPrice().equals(existingProduct.getPrice())) {
+                existingProduct.setPrice(productDao.getPrice());
+                productIsUpdated = true;
+            }
+
+            if (!productDao.getQuantity().equals(existingProduct.getQuantity())) {
+                existingProduct.setQuantity(productDao.getQuantity());
+                productIsUpdated = true;
+            }
+
+            if (productDao.getInternalReference().isEmpty()) {
+                existingProduct.setInternalReference(productDao.getInternalReference());
+                productIsUpdated = true;
+            }
+
+            if (!productDao.getShellId().equals(existingProduct.getShellId())) {
+                existingProduct.setShellId(productDao.getShellId());
+                productIsUpdated = true;
+            }
+
+            if (!productDao.getInventoryStatus().equals(existingProduct.getInventoryStatus())) {
+                existingProduct.setInventoryStatus(productDao.getInventoryStatus());
+                productIsUpdated = true;
+            }
+
+            if (!productDao.getRating().equals(existingProduct.getRating())) {
+                existingProduct.setRating(productDao.getRating());
+                productIsUpdated = true;
+            }
+
+            if (productIsUpdated) {
+                existingProduct.setUpdatedAt(Instant.now().toEpochMilli());
+            }
+
             try {
                 return productRepository.save(existingProduct);
             } catch (Exception e) {
