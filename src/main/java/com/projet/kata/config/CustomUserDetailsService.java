@@ -2,9 +2,8 @@ package com.projet.kata.config;
 
 import com.projet.kata.model.dao.AccountDao;
 import com.projet.kata.repository.AccountRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
@@ -34,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(account.getEmail())
                 .password(encoder.encode(account.getPassword()))
-                .roles("USER")
+                .roles(account.getEmail().equals("admin@admin.com") ? "ADMIN" : "USER")
                 .build();
 
     }

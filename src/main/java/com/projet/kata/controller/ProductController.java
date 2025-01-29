@@ -2,15 +2,13 @@ package com.projet.kata.controller;
 
 import com.projet.kata.model.dao.ProductDao;
 import com.projet.kata.service.ProductService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static com.projet.kata.util.Helper.ensureAdminAccess;
 
 @RestController
 @RequestMapping("/products")
@@ -20,8 +18,8 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDao> CreateNewProduct(@RequestBody ProductDao product) {
-        ensureAdminAccess();
         ProductDao createdProduct = productService.saveProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
@@ -44,8 +42,8 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDao> updateProductDetails(@PathVariable(name = "id") Long id, @RequestBody ProductDao productDao) {
-        ensureAdminAccess();
         ProductDao updatedProduct = productService.updateProduct(id, productDao);
         if (updatedProduct == null)
             return ResponseEntity.notFound().build();
@@ -55,8 +53,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> removeProduct(@PathVariable(name = "id") Long id) {
-        ensureAdminAccess();
         boolean isRemoved = productService.removeProduct(id);
 
         if (isRemoved) {
