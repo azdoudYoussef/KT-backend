@@ -21,77 +21,50 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductDao> CreateNewProduct(@RequestBody ProductDao product) {
-        try {
-            ensureAdminAccess();
-            ProductDao createdProduct = productService.saveProduct(product);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
-
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        ensureAdminAccess();
+        ProductDao createdProduct = productService.saveProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
     @GetMapping
     public ResponseEntity<List<ProductDao>> retrieveAllProducts() {
-        try {
-            List<ProductDao> products = productService.getAllProducts();
-            if (products.isEmpty())
-                return ResponseEntity.noContent().build();
-            return ResponseEntity.ok(products);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        List<ProductDao> products = productService.getAllProducts();
+        if (products.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProductDao> RetrieveProductDetails(@PathVariable(name = "id") Long id) {
-        try {
-            ProductDao product = productService.getProductDetails(id);
-            if (product == null)
-                return ResponseEntity.notFound().build();
+        ProductDao product = productService.getProductDetails(id);
+        if (product == null)
+            return ResponseEntity.notFound().build();
 
-            return ResponseEntity.ok(product);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+        return ResponseEntity.ok(product);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<ProductDao> updateProductDetails(@PathVariable(name = "id") Long id, @RequestBody ProductDao productDao) {
-        try {
-            ensureAdminAccess();
-            ProductDao updatedProduct = productService.updateProduct(id, productDao);
-            if (updatedProduct == null)
-                return ResponseEntity.notFound().build();
+        ensureAdminAccess();
+        ProductDao updatedProduct = productService.updateProduct(id, productDao);
+        if (updatedProduct == null)
+            return ResponseEntity.notFound().build();
 
-            return ResponseEntity.ok(updatedProduct);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+        return ResponseEntity.ok(updatedProduct);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeProduct(@PathVariable(name = "id") Long id) {
-        try {
-            ensureAdminAccess();
-            boolean isRemoved = productService.removeProduct(id);
+        ensureAdminAccess();
+        boolean isRemoved = productService.removeProduct(id);
 
-            if (isRemoved) {
-                return ResponseEntity.noContent().build();
-            }
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        if (isRemoved) {
+            return ResponseEntity.noContent().build();
         }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
     }
 
 }
