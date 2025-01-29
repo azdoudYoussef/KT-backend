@@ -2,14 +2,14 @@ package com.projet.kata.controller;
 
 import com.projet.kata.model.dao.CartDao;
 import com.projet.kata.service.CartService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cart")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CartController {
 
     private final CartService cartService;

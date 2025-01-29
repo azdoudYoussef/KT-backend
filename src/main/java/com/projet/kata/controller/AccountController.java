@@ -2,7 +2,7 @@ package com.projet.kata.controller;
 
 import com.projet.kata.model.dao.AccountDao;
 import com.projet.kata.service.AccountService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/account")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AccountController {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @PostMapping
     public ResponseEntity<AccountDao> CreateNewAccount(@RequestBody AccountDao account) {

@@ -1,21 +1,9 @@
 package com.projet.kata.service;
 
 import com.projet.kata.model.dao.AccountDao;
-import com.projet.kata.repository.AccountRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
-@AllArgsConstructor
-public class AccountService {
+public interface AccountService {
 
-    private AccountRepository accountRepository;
+    AccountDao saveAccount(AccountDao account);
 
-    public AccountDao saveAccount(AccountDao account) {
-        if (account == null || account.getUsername() == null || account.getEmail() == null || account.getPassword() == null) {
-            throw new IllegalArgumentException("Username, email and password are required");
-        }
-
-        return accountRepository.save(account);
-    }
 }

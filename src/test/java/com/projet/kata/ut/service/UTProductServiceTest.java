@@ -3,7 +3,7 @@ package com.projet.kata.ut.service;
 import com.projet.kata.KataApplicationTests;
 import com.projet.kata.model.dao.ProductDao;
 import com.projet.kata.repository.ProductRepository;
-import com.projet.kata.service.ProductService;
+import com.projet.kata.service.impl.ProductServiceImpl;
 import com.projet.kata.ut.helper.TestHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ public class UTProductServiceTest extends KataApplicationTests {
     ProductRepository productRepository;
 
     @InjectMocks
-    ProductService productService;
+    ProductServiceImpl productService;
 
 
 

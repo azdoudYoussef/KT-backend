@@ -2,14 +2,14 @@ package com.projet.kata.controller;
 
 import com.projet.kata.model.dao.WishlistDao;
 import com.projet.kata.service.WishlistService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/wishlist")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WishlistController {
 
     private final WishlistService wishlistService;
