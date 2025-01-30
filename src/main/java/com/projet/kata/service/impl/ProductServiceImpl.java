@@ -41,78 +41,79 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<ProductDao> existingProductOptional = productRepository.findById(productId);
 
-        boolean productIsUpdated = false;
-
-        if (existingProductOptional.isPresent()) {
-            ProductDao existingProduct = existingProductOptional.get();
-
-            if (productDao.getCode().isEmpty()) {
-                existingProduct.setCode(productDao.getCode());
-                productIsUpdated = true;
-            }
-
-            if (productDao.getName().isEmpty()) {
-                existingProduct.setName(productDao.getName());
-                productIsUpdated = true;
-            }
-
-            if (productDao.getDescription().isEmpty()) {
-                existingProduct.setDescription(productDao.getDescription());
-                productIsUpdated = true;
-            }
-
-            if (productDao.getImage().isEmpty()) {
-                existingProduct.setImage(productDao.getImage());
-                productIsUpdated = true;
-            }
-
-            if (productDao.getCategory().isEmpty()) {
-                existingProduct.setCategory(productDao.getCategory());
-                productIsUpdated = true;
-            }
-
-            if (!productDao.getPrice().equals(existingProduct.getPrice())) {
-                existingProduct.setPrice(productDao.getPrice());
-                productIsUpdated = true;
-            }
-
-            if (!productDao.getQuantity().equals(existingProduct.getQuantity())) {
-                existingProduct.setQuantity(productDao.getQuantity());
-                productIsUpdated = true;
-            }
-
-            if (productDao.getInternalReference().isEmpty()) {
-                existingProduct.setInternalReference(productDao.getInternalReference());
-                productIsUpdated = true;
-            }
-
-            if (!productDao.getShellId().equals(existingProduct.getShellId())) {
-                existingProduct.setShellId(productDao.getShellId());
-                productIsUpdated = true;
-            }
-
-            if (!productDao.getInventoryStatus().equals(existingProduct.getInventoryStatus())) {
-                existingProduct.setInventoryStatus(productDao.getInventoryStatus());
-                productIsUpdated = true;
-            }
-
-            if (!productDao.getRating().equals(existingProduct.getRating())) {
-                existingProduct.setRating(productDao.getRating());
-                productIsUpdated = true;
-            }
-
-            if (productIsUpdated) {
-                existingProduct.setUpdatedAt(Instant.now().toEpochMilli());
-            }
-
-            try {
-                return productRepository.save(existingProduct);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to update the product", e);
-            }
+        if (existingProductOptional.isEmpty()) {
+            return null;
         }
 
-        return null;
+        boolean productIsUpdated = false;
+
+        ProductDao existingProduct = existingProductOptional.get();
+
+        if (productDao.getCode().isEmpty()) {
+            existingProduct.setCode(productDao.getCode());
+            productIsUpdated = true;
+        }
+
+        if (productDao.getName().isEmpty()) {
+            existingProduct.setName(productDao.getName());
+            productIsUpdated = true;
+        }
+
+        if (productDao.getDescription().isEmpty()) {
+            existingProduct.setDescription(productDao.getDescription());
+            productIsUpdated = true;
+        }
+
+        if (productDao.getImage().isEmpty()) {
+            existingProduct.setImage(productDao.getImage());
+            productIsUpdated = true;
+        }
+
+        if (productDao.getCategory().isEmpty()) {
+            existingProduct.setCategory(productDao.getCategory());
+            productIsUpdated = true;
+        }
+
+        if (!productDao.getPrice().equals(existingProduct.getPrice())) {
+            existingProduct.setPrice(productDao.getPrice());
+            productIsUpdated = true;
+        }
+
+        if (!productDao.getQuantity().equals(existingProduct.getQuantity())) {
+            existingProduct.setQuantity(productDao.getQuantity());
+            productIsUpdated = true;
+        }
+
+        if (productDao.getInternalReference().isEmpty()) {
+            existingProduct.setInternalReference(productDao.getInternalReference());
+            productIsUpdated = true;
+        }
+
+        if (!productDao.getShellId().equals(existingProduct.getShellId())) {
+            existingProduct.setShellId(productDao.getShellId());
+            productIsUpdated = true;
+        }
+
+        if (!productDao.getInventoryStatus().equals(existingProduct.getInventoryStatus())) {
+            existingProduct.setInventoryStatus(productDao.getInventoryStatus());
+            productIsUpdated = true;
+        }
+
+        if (!productDao.getRating().equals(existingProduct.getRating())) {
+            existingProduct.setRating(productDao.getRating());
+            productIsUpdated = true;
+        }
+
+        if (productIsUpdated) {
+            existingProduct.setUpdatedAt(Instant.now().toEpochMilli());
+        }
+
+        try {
+            return productRepository.save(existingProduct);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update the product", e);
+        }
+
     }
 
     @Transactional
