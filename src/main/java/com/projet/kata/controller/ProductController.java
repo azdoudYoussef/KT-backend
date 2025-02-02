@@ -1,6 +1,6 @@
 package com.projet.kata.controller;
 
-import com.projet.kata.model.dao.ProductDao;
+import com.projet.kata.model.dto.ProductDto;
 import com.projet.kata.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,18 +23,18 @@ public class ProductController {
             description = "${swagger.controller.createNewProduct.notes}")
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDao> createNewProduct(
+    public ResponseEntity<ProductDto> createNewProduct(
             @Parameter(description = "${swagger.controller.createNewProduct.param.product}")
-            @RequestBody ProductDao product) {
-        ProductDao createdProduct = productService.saveProduct(product);
+            @RequestBody ProductDto product) {
+        ProductDto createdProduct = productService.saveProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
     @Operation(summary = "${swagger.controller.retrieveAllProducts.value}",
             description = "${swagger.controller.retrieveAllProducts.notes}")
     @GetMapping
-    public ResponseEntity<List<ProductDao>> retrieveAllProducts() {
-        List<ProductDao> products = productService.getAllProducts();
+    public ResponseEntity<List<ProductDto>> retrieveAllProducts() {
+        List<ProductDto> products = productService.getAllProducts();
         if (products.isEmpty())
             return ResponseEntity.noContent().build();
         return ResponseEntity.ok(products);
@@ -43,10 +43,10 @@ public class ProductController {
     @Operation(summary = "${swagger.controller.retrieveProductDetails.value}",
             description = "${swagger.controller.retrieveProductDetails.notes}")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ProductDao> retrieveProductDetails(
+    public ResponseEntity<ProductDto> retrieveProductDetails(
             @Parameter(description = "${swagger.controller.retrieveProductDetails.param.id}")
             @PathVariable(name = "id") Long id) {
-        ProductDao product = productService.getProductDetails(id);
+        ProductDto product = productService.getProductDetails(id);
         if (product == null)
             return ResponseEntity.notFound().build();
 
@@ -57,12 +57,12 @@ public class ProductController {
             description = "${swagger.controller.updateProductDetails.notes}")
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDao> updateProductDetails(
+    public ResponseEntity<ProductDto> updateProductDetails(
             @Parameter(description = "${swagger.controller.updateProductDetails.param.id}")
             @PathVariable(name = "id") Long id,
             @Parameter(description = "${swagger.controller.updateProductDetails.param.product}")
-            @RequestBody ProductDao product) {
-        ProductDao updatedProduct = productService.updateProduct(id, product);
+            @RequestBody ProductDto product) {
+        ProductDto updatedProduct = productService.updateProduct(id, product);
         if (updatedProduct == null)
             return ResponseEntity.notFound().build();
 

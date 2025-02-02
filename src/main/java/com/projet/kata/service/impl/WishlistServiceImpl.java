@@ -4,6 +4,8 @@ import com.projet.kata.model.dao.AccountDao;
 import com.projet.kata.model.dao.ProductDao;
 import com.projet.kata.model.dao.WishlistDao;
 import com.projet.kata.model.dao.WishlistItemDao;
+import com.projet.kata.model.dto.WishlistDto;
+import com.projet.kata.model.mapper.WishlistMapper;
 import com.projet.kata.repository.AccountRepository;
 import com.projet.kata.repository.ProductRepository;
 import com.projet.kata.repository.WishlistItemRepository;
@@ -23,8 +25,13 @@ public class WishlistServiceImpl implements WishlistService {
     private final WishlistItemRepository wishlistItemRepository;
     private final ProductRepository productRepository;
     private final AccountRepository accountRepository;
+    private final WishlistMapper wishlistMapper;
 
-    public WishlistDao getUserWishlist(String userEmail) {
+    public WishlistDto getUserWishlist(String userEmail) {
+        return this.wishlistMapper.toDTO(getWishlistByEmail(userEmail));
+    }
+
+    private WishlistDao getWishlistByEmail(String userEmail) {
         AccountDao user = accountRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return wishlistRepository.findByUser(user)
@@ -32,8 +39,8 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Transactional
-    public WishlistDao addProductToWishlist(String userEmail, Long productId) {
-        WishlistDao wishlist = getUserWishlist(userEmail);
+    public WishlistDto addProductToWishlist(String userEmail, Long productId) {
+        WishlistDao wishlist = getWishlistByEmail(userEmail);
         ProductDao product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
@@ -48,13 +55,13 @@ public class WishlistServiceImpl implements WishlistService {
             wishlist.getItems().add(wishlistItemRepository.save(newItem));
         }
 
-        return wishlistRepository.save(wishlist);
+        return this.wishlistMapper.toDTO(wishlistRepository.save(wishlist));
     }
 
     @Transactional
-    public WishlistDao removeProductFromWishlist(String userEmail, Long productId) {
-        WishlistDao wishlist = getUserWishlist(userEmail);
+    public WishlistDto removeProductFromWishlist(String userEmail, Long productId) {
+        WishlistDao wishlist = getWishlistByEmail(userEmail);
         wishlist.getItems().removeIf(item -> item.getProduct().getId().equals(productId));
-        return wishlistRepository.save(wishlist);
+        return this.wishlistMapper.toDTO(wishlistRepository.save(wishlist));
     }
 }

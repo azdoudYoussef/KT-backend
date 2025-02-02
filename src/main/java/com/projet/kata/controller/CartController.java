@@ -1,6 +1,6 @@
 package com.projet.kata.controller;
 
-import com.projet.kata.model.dao.CartDao;
+import com.projet.kata.model.dto.CartDto;
 import com.projet.kata.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,19 +19,19 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<CartDao> getCart() {
+    public ResponseEntity<CartDto> getCart() {
         String userEmail = getCurrentUserEmail();
         return ResponseEntity.ok(cartService.getUserCart(userEmail));
     }
 
     @PostMapping("/add/{productId}/{quantity}")
-    public ResponseEntity<CartDao> addProductToCart(@PathVariable Long productId, @PathVariable int quantity) {
+    public ResponseEntity<CartDto> addProductToCart(@PathVariable Long productId, @PathVariable int quantity) {
         String userEmail = getCurrentUserEmail();
         return ResponseEntity.ok(cartService.addProductToCart(userEmail, productId, quantity));
     }
 
     @DeleteMapping("/remove/{productId}")
-    public ResponseEntity<CartDao> removeProductFromCart(@PathVariable Long productId) {
+    public ResponseEntity<CartDto> removeProductFromCart(@PathVariable Long productId) {
         String userEmail = getCurrentUserEmail();
         return ResponseEntity.ok(cartService.removeProductFromCart(userEmail, productId));
     }

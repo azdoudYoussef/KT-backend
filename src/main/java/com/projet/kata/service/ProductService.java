@@ -1,18 +1,18 @@
 package com.projet.kata.service;
 
-import com.projet.kata.model.dao.ProductDao;
+import com.projet.kata.model.dto.ProductDto;
 
 import java.util.List;
 
 public interface ProductService {
 
-    List<ProductDao> getAllProducts();
+    List<ProductDto> getAllProducts();
 
-    ProductDao getProductDetails(Long id);
+    ProductDto getProductDetails(Long id);
 
-    ProductDao saveProduct(ProductDao product);
+    ProductDto saveProduct(ProductDto product);
 
-    ProductDao updateProduct(Long id, ProductDao productDao);
+    ProductDto updateProduct(Long id, ProductDto productDto);
 
     boolean removeProduct(Long id);
 }

@@ -1,6 +1,6 @@
 package com.projet.kata.controller;
 
-import com.projet.kata.model.dao.WishlistDao;
+import com.projet.kata.model.dto.WishlistDto;
 import com.projet.kata.service.WishlistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,19 +19,19 @@ public class WishlistController {
     }
 
     @GetMapping
-    public ResponseEntity<WishlistDao> getWishlist() {
+    public ResponseEntity<WishlistDto> getWishlist() {
         String userEmail = getCurrentUserEmail();
         return ResponseEntity.ok(wishlistService.getUserWishlist(userEmail));
     }
 
     @PostMapping("/add/{productId}")
-    public ResponseEntity<WishlistDao> addProductToWishlist(@PathVariable Long productId) {
+    public ResponseEntity<WishlistDto> addProductToWishlist(@PathVariable Long productId) {
         String userEmail = getCurrentUserEmail();
         return ResponseEntity.ok(wishlistService.addProductToWishlist(userEmail, productId));
     }
 
     @DeleteMapping("/remove/{productId}")
-    public ResponseEntity<WishlistDao> removeProductFromWishlist(@PathVariable Long productId) {
+    public ResponseEntity<WishlistDto> removeProductFromWishlist(@PathVariable Long productId) {
         String userEmail = getCurrentUserEmail();
         return ResponseEntity.ok(wishlistService.removeProductFromWishlist(userEmail, productId));
     }

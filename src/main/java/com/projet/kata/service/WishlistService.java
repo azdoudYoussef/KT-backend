@@ -1,12 +1,12 @@
 package com.projet.kata.service;
 
-import com.projet.kata.model.dao.WishlistDao;
+import com.projet.kata.model.dto.WishlistDto;
 
 public interface WishlistService {
 
-    WishlistDao getUserWishlist(String userEmail);
+    WishlistDto getUserWishlist(String userEmail);
 
-    WishlistDao addProductToWishlist(String userEmail, Long productId);
+    WishlistDto addProductToWishlist(String userEmail, Long productId);
 
-    WishlistDao removeProductFromWishlist(String userEmail, Long productId);
+    WishlistDto removeProductFromWishlist(String userEmail, Long productId);
 }

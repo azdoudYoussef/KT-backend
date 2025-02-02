@@ -1,6 +1,8 @@
 package com.projet.kata.service.impl;
 
 import com.projet.kata.model.dao.ProductDao;
+import com.projet.kata.model.dto.ProductDto;
+import com.projet.kata.model.mapper.ProductMapper;
 import com.projet.kata.repository.ProductRepository;
 import com.projet.kata.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -17,27 +19,29 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductDao saveProduct(ProductDao product) {
+    private final ProductMapper productMapper;
+
+    public ProductDto saveProduct(ProductDto product) {
         if (product == null || product.getName() == null || product.getPrice() == null) {
             throw new IllegalArgumentException("Product name and price are required");
         }
 
-        return productRepository.save(product);
+        return this.productMapper.toDTO(productRepository.save(this.productMapper.toEntity(product)));
     }
 
-    public List<ProductDao> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductDto> getAllProducts() {
+        return this.productMapper.toDTOList(productRepository.findAll());
     }
 
-    public ProductDao getProductDetails(Long productId) {
+    public ProductDto getProductDetails(Long productId) {
 
-        Optional<ProductDao> productOptional = productRepository.findById(productId);
-        return productOptional.orElse(null);
+        Optional<ProductDao> product = productRepository.findById(productId);
+        return this.productMapper.toDTO(product.orElse(null));
 
     }
 
     @Transactional
-    public ProductDao updateProduct(Long productId, ProductDao productDao) {
+    public ProductDto updateProduct(Long productId, ProductDto productDto) {
 
         Optional<ProductDao> existingProductOptional = productRepository.findById(productId);
 
@@ -49,58 +53,58 @@ public class ProductServiceImpl implements ProductService {
 
         ProductDao existingProduct = existingProductOptional.get();
 
-        if (productDao.getCode().isEmpty()) {
-            existingProduct.setCode(productDao.getCode());
+        if (productDto.getCode().isEmpty()) {
+            existingProduct.setCode(productDto.getCode());
             productIsUpdated = true;
         }
 
-        if (productDao.getName().isEmpty()) {
-            existingProduct.setName(productDao.getName());
+        if (productDto.getName().isEmpty()) {
+            existingProduct.setName(productDto.getName());
             productIsUpdated = true;
         }
 
-        if (productDao.getDescription().isEmpty()) {
-            existingProduct.setDescription(productDao.getDescription());
+        if (productDto.getDescription().isEmpty()) {
+            existingProduct.setDescription(productDto.getDescription());
             productIsUpdated = true;
         }
 
-        if (productDao.getImage().isEmpty()) {
-            existingProduct.setImage(productDao.getImage());
+        if (productDto.getImage().isEmpty()) {
+            existingProduct.setImage(productDto.getImage());
             productIsUpdated = true;
         }
 
-        if (productDao.getCategory().isEmpty()) {
-            existingProduct.setCategory(productDao.getCategory());
+        if (productDto.getCategory().isEmpty()) {
+            existingProduct.setCategory(productDto.getCategory());
             productIsUpdated = true;
         }
 
-        if (!productDao.getPrice().equals(existingProduct.getPrice())) {
-            existingProduct.setPrice(productDao.getPrice());
+        if (!productDto.getPrice().equals(existingProduct.getPrice())) {
+            existingProduct.setPrice(productDto.getPrice());
             productIsUpdated = true;
         }
 
-        if (!productDao.getQuantity().equals(existingProduct.getQuantity())) {
-            existingProduct.setQuantity(productDao.getQuantity());
+        if (!productDto.getQuantity().equals(existingProduct.getQuantity())) {
+            existingProduct.setQuantity(productDto.getQuantity());
             productIsUpdated = true;
         }
 
-        if (productDao.getInternalReference().isEmpty()) {
-            existingProduct.setInternalReference(productDao.getInternalReference());
+        if (productDto.getInternalReference().isEmpty()) {
+            existingProduct.setInternalReference(productDto.getInternalReference());
             productIsUpdated = true;
         }
 
-        if (!productDao.getShellId().equals(existingProduct.getShellId())) {
-            existingProduct.setShellId(productDao.getShellId());
+        if (!productDto.getShellId().equals(existingProduct.getShellId())) {
+            existingProduct.setShellId(productDto.getShellId());
             productIsUpdated = true;
         }
 
-        if (!productDao.getInventoryStatus().equals(existingProduct.getInventoryStatus())) {
-            existingProduct.setInventoryStatus(productDao.getInventoryStatus());
+        if (!productDto.getInventoryStatus().equals(existingProduct.getInventoryStatus())) {
+            existingProduct.setInventoryStatus(productDto.getInventoryStatus());
             productIsUpdated = true;
         }
 
-        if (!productDao.getRating().equals(existingProduct.getRating())) {
-            existingProduct.setRating(productDao.getRating());
+        if (!productDto.getRating().equals(existingProduct.getRating())) {
+            existingProduct.setRating(productDto.getRating());
             productIsUpdated = true;
         }
 
@@ -109,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         try {
-            return productRepository.save(existingProduct);
+            return this.productMapper.toDTO(productRepository.save(existingProduct));
         } catch (Exception e) {
             throw new RuntimeException("Failed to update the product", e);
         }

@@ -1,13 +1,13 @@
 package com.projet.kata.service;
 
-import com.projet.kata.model.dao.CartDao;
+import com.projet.kata.model.dto.CartDto;
 
 public interface CartService {
 
-    CartDao getUserCart(String userEmail);
+    CartDto getUserCart(String userEmail);
 
-    CartDao addProductToCart(String userEmail, Long productId, int quantity);
+    CartDto addProductToCart(String userEmail, Long productId, int quantity);
 
-    CartDao removeProductFromCart(String userEmail, Long productId);
+    CartDto removeProductFromCart(String userEmail, Long productId);
 
 }

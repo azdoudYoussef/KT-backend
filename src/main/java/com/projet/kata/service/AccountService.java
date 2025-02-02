@@ -1,9 +1,9 @@
 package com.projet.kata.service;
 
-import com.projet.kata.model.dao.AccountDao;
+import com.projet.kata.model.dto.AccountDto;
 
 public interface AccountService {
 
-    AccountDao saveAccount(AccountDao account);
+    AccountDto saveAccount(AccountDto account);
 
 }

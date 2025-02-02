@@ -1,6 +1,6 @@
 package com.projet.kata.controller;
 
-import com.projet.kata.model.dao.AccountDao;
+import com.projet.kata.model.dto.AccountDto;
 import com.projet.kata.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,14 +18,9 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping
-    public ResponseEntity<AccountDao> CreateNewAccount(@RequestBody AccountDao account) {
-        try {
-            AccountDao createdAccount = accountService.saveAccount(account);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdAccount);
-
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<AccountDto> CreateNewAccount(@RequestBody AccountDto account) {
+        AccountDto createdAccount = accountService.saveAccount(account);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAccount);
     }
 
 }
